@@ -26,7 +26,8 @@
   position: relative;
   width: 300px;
   height: 450px;
-  background-image: url(../src/img/card3.webp);
+  background-color: #111;
+  border-radius: 15px;
   background-position: center center;
   background-size: 130% 115%;
   background-repeat: no-repeat;

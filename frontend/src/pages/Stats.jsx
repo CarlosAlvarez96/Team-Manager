@@ -7,14 +7,15 @@ const Stats = () => {
   const userId = sessionStorage.getItem('userId');
   const [statsId, setStatsId] = useState(null);
   const [stats, setStats] = useState({
-    id: '', // Agregamos el ID aquí
     pace: '',
     shooting: '',
     physical: '',
     defending: '',
     dribbling: '',
     passing: '',
-    positions: []
+    positions: [], 
+    playerName: '',
+    rating: 0,
   });
 
   useEffect(() => {
@@ -22,6 +23,7 @@ const Stats = () => {
       try {
         const response = await get(`/individual-stats/user/${userId}`);
         setStatsId(response.id);
+        const nombre = await get(`/user/me`);
         const parsedStats = {
           ...response,
           pace: parseInt(response.pace),
@@ -30,7 +32,10 @@ const Stats = () => {
           defending: parseInt(response.defending),
           dribbling: parseInt(response.dribbling),
           passing: parseInt(response.passing),
-          positions: response.position ? response.position.split(',') : []
+          positions: response.position ? response.position.split(',') : [],
+          playerName: nombre.username,
+          rating: parseInt((parseInt(response.pace) + parseInt(response.shooting) + parseInt(response.physical) + parseInt(response.defending) + parseInt(response.dribbling) + parseInt(response.passing)) / 6)
+
         };
         setStats(parsedStats);
       } catch (error) {

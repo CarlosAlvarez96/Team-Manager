@@ -1,5 +1,7 @@
 import React from 'react';
 import '../PlayerCard.css';
+import defaultPlayerImage  from '../img/default_user.png'
+
 
 const PlayerCard = ({
   rating,
@@ -15,23 +17,26 @@ const PlayerCard = ({
   defending,
   dribbling,
   passing
-}) => {
-  return (
+  }) => {
+    const image = playerImage ? playerImage : defaultPlayerImage;
+    const posicion = position ? position.split(',') : ['N/A'];
+    console.log(posicion);
+    return (
     <div className="wrapper">
       <div className="fut-player-card">
         <div className="player-card-top">
           <div className="player-master-info">
             <div className="player-rating"><span>{rating}</span></div>
-            <div className="player-position"><span>{position}</span></div>
-            <div className="player-nation">
-              <img src={nationImage} alt="Nation" draggable="false" />
-            </div>
-            <div className="player-club">
+            <div className="player-position"><span>{posicion[0]}</span></div>
+            {/* <div className="player-nation">
+              <img src={nationImage} alt="Nation" draggable="false" /> */}
+              </div>
+            {/* <div className="player-club">
               <img src={clubImage} alt="Club" draggable="false" />
             </div>
-          </div>
+          </div> */}
           <div className="player-picture">
-            <img src={playerImage} alt="Player" draggable="false" />
+            <img src={image} alt="Player" draggable="false" />
           </div>
         </div>
         <div className="player-card-bottom">
