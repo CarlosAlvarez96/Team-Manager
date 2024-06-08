@@ -9,6 +9,7 @@ const Squad = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newSquadName, setNewSquadName] = useState('');
+  const currentUserId = parseInt(sessionStorage.getItem('userId')); // Reemplaza esto con la forma en que obtienes el ID del usuario actual
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,13 +20,12 @@ const Squad = () => {
         setSquads(data);
         setTimeout(() => {
           setLoading(false);
-        }, 1500);
+        }, 1000);
       } catch (error) {
         setError(error);
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
@@ -64,7 +64,7 @@ const Squad = () => {
         </div>
       ) : (
         <div className="container bg-white p-5 rounded-md m-10 mx-auto">
-          <h2 className="text-2xl font-bold mb-4">Tus peña</h2>
+          <h2 className="text-2xl font-bold mb-4">Tus peñas</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {squads.map((squad) => (
               <div key={squad.id} className="bg-white shadow-lg rounded-lg overflow-hidden">
@@ -76,12 +76,14 @@ const Squad = () => {
                         Ver peña
                       </button>
                     </Link>
-                    <button
-                      onClick={() => handleDeleteSquad(squad.id)}
-                      className="bg-red-500 text-white font-semibold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
-                    >
-                      Borrar peña
-                    </button>
+                    {squad && squad.manager === currentUserId && (
+                      <button
+                        onClick={() => handleDeleteSquad(squad.id)}
+                        className="bg-red-500 text-white font-semibold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-red-500"
+                      >
+                        Delete
+                      </button>
+                    )}
                   </div>
                 </div>
               </div>

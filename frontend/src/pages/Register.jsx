@@ -22,7 +22,7 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (formData.username.length < 6) {
+    if (formData.username.length < 4) {
       Swal.fire({
         icon: "warning",
         title: "Invalid Username",

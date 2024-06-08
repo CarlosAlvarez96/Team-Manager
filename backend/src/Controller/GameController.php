@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\Common\Collections\Criteria;
 use App\Entity\Game;
 use App\Repository\SquadRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -111,4 +112,29 @@ class GameController extends AbstractController
         // Devuelve una respuesta JSON con el juego encontrado
         return new JsonResponse($formattedGame);
     }
+    #[Route('/{squadId}', name: 'games_by_squad', methods: ['POST'])]
+    public function getGamesBySquadId(int $squadId, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Obtiene el repositorio de la entidad Game
+        $gameRepository = $entityManager->getRepository(Game::class);
+
+        // Obtiene todos los juegos
+        $games = $gameRepository->findAllBySquadId($squadId);
+
+        // Formatea los datos de los juegos para la respuesta
+        $formattedGames = [];
+        foreach ($games as $game) {
+            $formattedGames[] = [
+                'id' => $game->getId(),
+                'datetime' => $game->getDatetime() ? $game->getDatetime()->format('Y-m-d H:i:s') : null,
+                'location' => $game->getLocation(),
+                // Puedes incluir otros campos si lo deseas
+            ];
+        }
+
+        // Devuelve una respuesta JSON con todos los juegos
+        return new JsonResponse($formattedGames);
+    }
+
+
 }

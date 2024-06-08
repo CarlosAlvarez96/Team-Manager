@@ -47,7 +47,6 @@ security:
     - { path: ^/user/me, roles: PUBLIC_ACCESS }
     - { path: ^/user/register, roles: PUBLIC_ACCESS }
     - { path: ^/user/\d+/addUserByEmail, roles: PUBLIC_ACCESS }
-    # - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
     - { path: ^/squad/all, roles: PUBLIC_ACCESS }
     - { path: ^/squad/create, roles: PUBLIC_ACCESS }
     - { path: ^/squad/\d+, roles: PUBLIC_ACCESS }
@@ -60,6 +59,9 @@ security:
     - { path: ^/individual-stats/\d+/delete, roles: PUBLIC_ACCESS }
     - { path: ^/game/all, roles: PUBLIC_ACCESS }
     - { path: ^/game/create, roles: PUBLIC_ACCESS }
+    - { path: ^/game/\d+, roles: PUBLIC_ACCESS }
+    - { path: ^/squad/\d+/updateMoney, roles: PUBLIC_ACCESS }
+
 
 
 

@@ -8,7 +8,7 @@ const PlayerCard = ({
   position,
   nationImage,
   clubImage,
-  playerImage,
+  player_image_url,
   extraStats,
   playerName,
   pace,
@@ -18,9 +18,8 @@ const PlayerCard = ({
   dribbling,
   passing
   }) => {
-    const image = playerImage ? playerImage : defaultPlayerImage;
-    const posicion = position ? position.split(',') : ['N/A'];
-    console.log(posicion);
+    const image = player_image_url ? player_image_url : defaultPlayerImage;
+    const posicion = position ? position.split(',') : [''];
     return (
     <div className="wrapper">
       <div className="fut-player-card">

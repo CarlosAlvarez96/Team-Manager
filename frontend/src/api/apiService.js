@@ -22,7 +22,6 @@ const get = async (endpoint) => {
     throw new Error(`Error en la petición GET al endpoint: ${endpoint} (${response.status} ${response.statusText})`);
   }
   const data = await response.json();
-  console.log(data);
   return data;
 };
 
@@ -38,8 +37,6 @@ const post = async (endpoint, dto) => {
     },
     body: JSON.stringify(dto, replacer),
    });
-   console.log(JSON.stringify(dto, replacer));
-  //  console.log(JSON.stringify(dto, replacer));
   if (!response.ok) {
     throw new Error(
       `Error en la petición POST al endpoint: ${endpoint} (${response.status} ${response.statusText})`

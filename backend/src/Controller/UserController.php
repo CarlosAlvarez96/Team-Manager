@@ -145,7 +145,7 @@ class UserController extends AbstractController
         $stats->setDefending(0);
         $stats->setDribbling(0);
         $stats->setPassing(0);
-        $stats->setPosition('default'); // o cualquier valor por defecto
+        $stats->setPosition(''); // o cualquier valor por defecto
         $stats->setUser($user);
 
         // Guarda las estadísticas individuales en la base de datos
@@ -259,5 +259,34 @@ class UserController extends AbstractController
 
         return new JsonResponse(['message' => 'User removed from squad successfully'], Response::HTTP_OK);
     }
-    
+    #[Route('/deleteAll', name: 'delete_all_users', methods: ['DELETE'])]
+    public function deleteAllUsers(EntityManagerInterface $entityManager): Response
+    {
+        $userRepository = $entityManager->getRepository(User::class);
+        $users = $userRepository->findAll();
+        
+        foreach ($users as $user) {
+            $entityManager->remove($user);
+        }
+
+        $entityManager->flush();
+
+        return new JsonResponse(['message' => 'All users have been deleted successfully'], Response::HTTP_OK);
+    }
+
+    #[Route('/{id}', name: 'delete_user_by_id', methods: ['DELETE'])]
+    public function deleteUserById(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $userRepository = $entityManager->getRepository(User::class);
+        $user = $userRepository->find($id);
+
+        if (!$user) {
+            return new JsonResponse(['error' => 'User not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $entityManager->remove($user);
+        $entityManager->flush();
+
+        return new JsonResponse(['message' => 'User with ID ' . $id . ' has been deleted successfully'], Response::HTTP_OK);
+    }
 }

@@ -39,6 +39,15 @@ class GameRepository extends ServiceEntityRepository
         }
     }
 
+    public function findAllBySquadId(int $squadId): array
+    {
+        return $this->createQueryBuilder('g')
+            ->andWhere('g.squad = :squadId')
+            ->setParameter('squadId', $squadId)
+            ->getQuery()
+            ->getResult();
+    }
+
 //    /**
 //     * @return Game[] Returns an array of Game objects
 //     */

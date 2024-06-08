@@ -39,6 +39,40 @@ class SquadController extends AbstractController
         // Devuelve una respuesta JSON con todas las escuadras
         return new JsonResponse($formattedSquads);
     }
+   
+
+    #[Route('/{id}/updateMoney', name: 'squad_update_money', methods: ['POST'])]
+    public function updateSquadMoney(int $id, Request $request, EntityManagerInterface $entityManager): Response
+    {
+        // Obtiene el repositorio de la entidad Squad
+        $squadRepository = $entityManager->getRepository(Squad::class);
+
+        // Busca el escuadrón por su ID
+        $squad = $squadRepository->find($id);
+
+        // Verifica si el escuadrón existe
+        if (!$squad) {
+            return new JsonResponse(['error' => 'Squad not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Obtiene el nuevo valor de dinero del cuerpo de la solicitud
+        $data = json_decode($request->getContent(), true);
+
+        // Verifica si se ha proporcionado el nuevo valor de dinero
+        if (!isset($data['money'])) {
+            return new JsonResponse(['error' => 'Money value is required'], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Actualiza el dinero del escuadrón
+        $squad->setMoney($data['money']);
+
+        // Guarda los cambios en la base de datos
+        $entityManager->flush();
+
+        // Devuelve una respuesta de éxito
+        return new JsonResponse(['message' => 'Squad money updated successfully'], Response::HTTP_OK);
+    }
+
 
     #[Route('/create/{userId}', name: 'squad_create', methods: ['POST'])]
     public function createSquad(int $userId, Request $request, EntityManagerInterface $entityManager): Response
@@ -60,7 +94,9 @@ class SquadController extends AbstractController
         }
 
         $squad->addUser($user);
-
+        $squad->setManager($user);
+        $squad->setMoney(0);
+        
         $entityManager->persist($squad);
         $entityManager->flush();
 
@@ -86,7 +122,8 @@ class SquadController extends AbstractController
         $formattedSquad = [
             'id' => $squad->getId(),
             'name' => $squad->getName(),
-            // Puedes incluir otros campos si lo deseas
+            'manager' => $squad->getManager(),
+            'money' => $squad->getMoney()
         ];
 
         // Devuelve una respuesta JSON con la escuadra encontrada
@@ -179,7 +216,7 @@ class SquadController extends AbstractController
         return new JsonResponse(['message' => 'User added to squad successfully'], Response::HTTP_OK);
     }
 
-    #[Route('/{id}/removeUser/{userId}', name: 'squad_remove_user', methods: ['POST'])]
+    #[Route('/{id}/removeUser/{userId}', name: 'squad_remove_user', methods: ['DELETE'])]
     public function removeUserFromSquad(int $id, int $userId, EntityManagerInterface $entityManager): Response
     {
         // Obtiene el repositorio de la entidad Squad
@@ -229,7 +266,7 @@ class SquadController extends AbstractController
                 $formattedSquads[] = [
                     'id' => $squad->getId(),
                     'name' => $squad->getName(),
-                    // Puedes incluir otros campos si lo deseas
+                    'manager' => $squad->getManager()
                 ];
             }
 

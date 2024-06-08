@@ -58,7 +58,7 @@ const Header = () => {
       <div className="flex flex-col md:flex-row justify-between items-center p-4 ">
         <div className="flex items-center">
           <h2 className={`text-4xl font-bold p-2 m-2 `}>
-            Squad Manager
+            Gestor de equipos
           </h2>
         </div>
         <button

@@ -40,6 +40,13 @@ services:
             - symfony_app
         env_file:
             - .env.nginx.local
+    frontend:
+        build:
+            context: ../../frontend
+        ports:
+            - 5173:80
+        networks:
+            - symfony_app
 
 volumes:
     symfony_app_var:

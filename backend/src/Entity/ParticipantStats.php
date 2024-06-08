@@ -14,7 +14,7 @@ class ParticipantStats
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'participantStats')]
-    private ?Participant $participant = null; // Corregido el nombre de la propiedad
+    private ?Participant $participant = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $goals = null;

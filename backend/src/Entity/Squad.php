@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\SquadRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SquadRepository::class)]
@@ -23,6 +24,12 @@ class Squad
 
     #[ORM\OneToMany(mappedBy: 'squad', targetEntity: Game::class, orphanRemoval: true)]
     private Collection $games;
+
+    #[ORM\ManyToOne(inversedBy: 'managerSquads')]
+    private ?user $manager = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
+    private ?string $money = null;
 
     public function __construct()
     {
@@ -99,6 +106,30 @@ class Squad
                 $game->setSquad(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getManager(): ?int
+    {
+        return $this->manager ? $this->manager->getId() : null;
+    }
+
+    public function setManager(?user $manager): static
+    {
+        $this->manager = $manager;
+
+        return $this;
+    }
+
+    public function getMoney(): ?string
+    {
+        return $this->money;
+    }
+
+    public function setMoney(?string $money): static
+    {
+        $this->money = $money;
 
         return $this;
     }
