@@ -1,4 +1,4 @@
-![Captura de pantalla 2024-06-09 220619](https://github.com/CarlosAlvarez96/Team-Manager/assets/116850911/540f3534-ded8-4637-9f7c-889fd12952ed)# Team-Manager
+# Team-Manager
 
 ## 4.1. Introducción a la aplicación (Getting Started)
 "Team-Manager" o "Gestor de equipos" es una aplicación web que usa un back-end con Symfony-php y un front-end con React-js. Cada parte de la aplicación está dockerizada (frontend(vite), mysql, php y nginx) y requiere de una serie de instrucciones para su despliegue.
