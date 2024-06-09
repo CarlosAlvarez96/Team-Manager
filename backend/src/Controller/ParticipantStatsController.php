@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Entity\Participant; // Import the Participant class
+use App\Entity\Participant; 
 
 #[Route('/participant/stats', name: 'participant_stats_')]
 class ParticipantStatsController extends AbstractController

@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use App\Entity\User;
 
@@ -19,10 +18,8 @@ class IndividualStatsController extends AbstractController
     #[Route('/all', name: 'individual_stats_all', methods: ['GET'])]
     public function getAllIndividualStats(IndividualStatsRepository $individualStatsRepository): JsonResponse
     {
-        // Obtiene todos los registros de IndividualStats
         $individualStats = $individualStatsRepository->findAll();
 
-        // Formatea los datos de los registros para la respuesta
         $formattedStats = [];
         foreach ($individualStats as $stats) {
             $formattedStats[] = [
@@ -38,7 +35,6 @@ class IndividualStatsController extends AbstractController
             ];
         }
 
-        // Devuelve una respuesta JSON con todos los registros de IndividualStats
         return new JsonResponse($formattedStats);
     }
     #[Route('/create', name: 'create_individual_stats', methods: ['POST'])]

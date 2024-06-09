@@ -14,8 +14,7 @@ export const AuthProvider = ({ children }) => {
 
     setEmailState(userEmail);
 
-    // Iniciar temporizador para cerrar sesión después de una hora de inactividad
-    const timer = setTimeout(logout, 3600000); // 3600000 ms = 1 hora
+    const timer = setTimeout(logout, 3600000);
     setSessionTimer(timer);
   };
 
@@ -34,8 +33,7 @@ export const AuthProvider = ({ children }) => {
 
     window.addEventListener("unload", handleUnload);
 
-    // Iniciar temporizador para cerrar sesión después de una hora de inactividad
-    const timer = setTimeout(logout, 3600000); // 3600000 ms = 1 hora
+    const timer = setTimeout(logout, 3600000); 
     setSessionTimer(timer);
 
     return () => {
@@ -46,7 +44,7 @@ export const AuthProvider = ({ children }) => {
 
   const resetSessionTimer = () => {
     clearTimeout(sessionTimer);
-    const timer = setTimeout(logout, 3600000); // 3600000 ms = 1 hora
+    const timer = setTimeout(logout, 3600000); 
     setSessionTimer(timer);
   };
 

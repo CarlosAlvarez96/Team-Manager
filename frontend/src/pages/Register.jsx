@@ -53,7 +53,6 @@ const Register = () => {
     }
 
     try {
-      console.log("Registering user:", formData);
       const response = await axios.post(
         "http://localhost/user/register",
         {
@@ -68,7 +67,6 @@ const Register = () => {
         }
       );
 
-      console.log("Registration successful:", response.data);
       Swal.fire({
         icon: "success",
         title: "Registration Successful!",

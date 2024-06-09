@@ -9,7 +9,7 @@ const Squad = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [newSquadName, setNewSquadName] = useState('');
-  const currentUserId = parseInt(sessionStorage.getItem('userId')); // Reemplaza esto con la forma en que obtienes el ID del usuario actual
+  const currentUserId = parseInt(sessionStorage.getItem('userId')); 
 
   useEffect(() => {
     const fetchData = async () => {

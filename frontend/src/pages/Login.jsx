@@ -9,7 +9,6 @@ const Login = () => {
   const { login, setEmail: setAuthEmail } = useAuth();
   const navigate = useNavigate();
 
-  // Cargar datos de inicio de sesión desde el almacenamiento local cuando el componente se monta
   useEffect(() => {
     const storedEmail = localStorage.getItem('email');
     if (storedEmail) {
@@ -49,7 +48,6 @@ const Login = () => {
       const userId = userData.id;
       setAuthEmail(userEmail);
 
-      // Guardar email y userId en el almacenamiento local
       localStorage.setItem('email', userEmail);
       sessionStorage.setItem('userId', userId);
 

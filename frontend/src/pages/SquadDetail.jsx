@@ -11,24 +11,13 @@ const SquadDetail = () => {
   const [users, setUsers] = useState([]);
   const [arrStats, setArrStats] = useState([]);
   const [error, setError] = useState(null);
-  const [statsId, setStatsId] = useState('');
   const [newUserEmail, setNewUserEmail] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [newMoney, setNewMoney] = useState('');
-  const [stats, setStats] = useState({
-    pace: '',
-    shooting: '',
-    physical: '',
-    defending: '',
-    dribbling: '',
-    passing: '',
-    positions: [], 
-    playerName: '',
-  });
-
   const currentUserId = parseInt(sessionStorage.getItem('userId'));  
-  console.log('Current User ID:', currentUserId);  
+
+
   const fetchSquadById = async () => {
     try {
       const data = await get(`/squad/${id}`);
@@ -83,7 +72,7 @@ const SquadDetail = () => {
       try {
         const gamesData = await get('/game/' + squadId);
         setGames(gamesData);
-        console.log('Games:', gamesData);
+        console.log(gamesData);
       } catch (error) {
         setError(error.message);
         showErrorAlert('Error fetching games:', error.message);
@@ -133,12 +122,9 @@ const SquadDetail = () => {
     }
   };
 
-  // Elimina las llamadas a showSuccessAlert y showErrorAlert
   const handleRemoveSelectedPlayers = async (userId) => {
     try {
-      console.log('Removing user:', `/squad/${id}/removeUser/${userId}`);
       await deleteMethod(`/squad/${id}/removeUser/${userId}`);
-      // Utiliza Swal.fire para mostrar una alerta de éxito
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -146,7 +132,6 @@ const SquadDetail = () => {
       });
       await fetchUsersBySquadId(id);
     } catch (error) {
-      // Utiliza Swal.fire para mostrar una alerta de error
       Swal.fire({
         icon: 'error',
         title: 'Error',

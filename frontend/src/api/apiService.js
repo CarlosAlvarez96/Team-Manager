@@ -1,4 +1,4 @@
-const apiUrl = 'http://localhost';
+const apiUrl = "http://localhost";
 
 const replacer = (key, value) => {
   if (typeof value === "number") {
@@ -16,15 +16,18 @@ const get = async (endpoint) => {
     },
   });
   if (!response.ok) {
-    console.error(`Error en la petición GET al endpoint: ${endpoint} (${response.status} ${response.statusText})`);
-    const errorData = await response.json(); // Obtener detalles del error si están disponibles
+    console.error(
+      `Error en la petición GET al endpoint: ${endpoint} (${response.status} ${response.statusText})`
+    );
+    const errorData = await response.json();
     console.error(errorData);
-    throw new Error(`Error en la petición GET al endpoint: ${endpoint} (${response.status} ${response.statusText})`);
+    throw new Error(
+      `Error en la petición GET al endpoint: ${endpoint} (${response.status} ${response.statusText})`
+    );
   }
   const data = await response.json();
   return data;
 };
-
 
 const post = async (endpoint, dto) => {
   const token = sessionStorage.getItem("token");
@@ -36,7 +39,7 @@ const post = async (endpoint, dto) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(dto, replacer),
-   });
+  });
   if (!response.ok) {
     throw new Error(
       `Error en la petición POST al endpoint: ${endpoint} (${response.status} ${response.statusText})`
@@ -65,8 +68,7 @@ const put = async (endpoint, dto) => {
   return data;
 };
 
-
-const deleteMethod  = async (endpoint) => {
+const deleteMethod = async (endpoint) => {
   const token = sessionStorage.getItem("token");
   await fetch(`${apiUrl}${endpoint}`, {
     method: "DELETE",

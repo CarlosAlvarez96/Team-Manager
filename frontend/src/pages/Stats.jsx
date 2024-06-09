@@ -77,7 +77,7 @@ const Stats = () => {
     reader.onload = (event) => {
       setStats(prevStats => ({
         ...prevStats,
-        player_image_url: event.target.result // Almacenar la imagen como una URL de datos
+        player_image_url: event.target.result 
       }));
     };
     reader.readAsDataURL(file);
@@ -113,7 +113,6 @@ const Stats = () => {
         position: stats.positions.join(',')
       });
 
-      // Actualizamos stats con los datos actualizados desde el servidor
       setStats(prevStats => ({
         ...prevStats,
         ...response
@@ -136,7 +135,7 @@ const Stats = () => {
 
   return (
     <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
-      <PlayerCard {...stats} className="p-0 m-0"/>
+      <PlayerCard {...stats} className="p-0 m-0" />
       <div className="max-w-lg mx-auto p-6 bg-white rounded-lg shadow-md">
         <h2 className="text-2xl font-bold mb-4">Actualizar tus Estadísticas Individuales</h2>
         <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-6 sm:grid-cols-2">
@@ -170,29 +169,29 @@ const Stats = () => {
               <input type="checkbox" name="position" value="PT" checked={stats.positions.includes("PT")} onChange={handlePositionChange} className="mr-1" />
               PT - Portero
             </label>
-<label className="inline-flex items-center">
-<input type="checkbox" name="position" value="DF" checked={stats.positions.includes("DF")} onChange={handlePositionChange} className="mr-1" />
-DF - Defensa
-</label>
-<label className="inline-flex items-center">
-<input type="checkbox" name="position" value="MC" checked={stats.positions.includes("MC")} onChange={handlePositionChange} className="mr-1" />
-MC - Centrocampista
-</label>
-<label className="inline-flex items-center">
-<input type="checkbox" name="position" value="DC" checked={stats.positions.includes("DC")} onChange={handlePositionChange} className="mr-1" />
-DC - Delantero
-</label>
-</div>
-<div className="flex flex-col">
-<label className="mb-2">Subir imagen:</label>
-<input type="file" accept="image/*" onChange={handleImageChange} />
-{stats.image && <img src={stats.image} alt="Uploaded" className="mt-2 max-h-32" />}
-</div>
-<button type="submit" className="col-span-2 p-2 bg-blue-500 text-white rounded hover:bg-blue-600">Actualizar Estadísticas</button>
-</form>
-</div>
-</div>
-);
+            <label className="inline-flex items-center">
+              <input type="checkbox" name="position" value="DF" checked={stats.positions.includes("DF")} onChange={handlePositionChange} className="mr-1" />
+              DF - Defensa
+            </label>
+            <label className="inline-flex items-center">
+              <input type="checkbox" name="position" value="MC" checked={stats.positions.includes("MC")} onChange={handlePositionChange} className="mr-1" />
+              MC - Centrocampista
+            </label>
+            <label className="inline-flex items-center">
+              <input type="checkbox" name="position" value="DC" checked={stats.positions.includes("DC")} onChange={handlePositionChange} className="mr-1" />
+              DC - Delantero
+            </label>
+          </div>
+          <div className="flex flex-col">
+            <label className="mb-2">Subir imagen:</label>
+            <input type="file" accept="image/*" onChange={handleImageChange} />
+            {stats.player_image_url && <img src={stats.player_image_url} alt="Uploaded" className="mt-2 max-h-32" />}
+          </div>
+          <button type="submit" className="col-span-2 p-2 bg-blue-500 text-white rounded hover:bg-blue-600">Actualizar Estadísticas</button>
+        </form>
+      </div>
+    </div>
+  );
 };
 
 export default Stats;
