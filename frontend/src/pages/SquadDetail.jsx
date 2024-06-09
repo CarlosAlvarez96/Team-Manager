@@ -239,17 +239,18 @@ const SquadDetail = () => {
         <h2 className="text-2xl font-bold mb-4">Partidos jugados</h2>
         {games.length === 0 && <p>No se encontraron partidos.</p>}
         {games.length > 0 && (
-          <ul>
-            {games.map((game) => (
-              <li key={game.id}>
-                <strong>Lugar:</strong> {game.location}<br />
-                <strong>Date:</strong> {game.datetime}<br />
-                <strong>Price:</strong> {game.price}<br />
-                <strong>Team1:</strong> {game.team1.join(', ')}<br />
-                <strong>Team2:</strong> {game.team2.join(', ')}<br />
-              </li>
-            ))}
-          </ul>
+        <ul className="grid gap-4 py-4 px-6 bg-white rounded-lg shadow-md">
+        {games.map((game) => (
+          <li key={game.id} className="border border-gray-200 p-4 rounded-md">
+            <strong className="font-semibold">Lugar:</strong> {game.location}<br />
+            <strong className="font-semibold">Date:</strong> {game.datetime}<br />
+            <strong className="font-semibold">Price:</strong> {game.price}<br />
+            <strong className="font-semibold">Team1:</strong> {game.team1.join(', ')}<br />
+            <strong className="font-semibold">Team2:</strong> {game.team2.join(', ')}<br />
+          </li>
+        ))}
+      </ul>
+      
         )}
       </div>
     </div>

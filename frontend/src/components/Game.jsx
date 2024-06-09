@@ -16,19 +16,6 @@ const Game = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchSquads = async () => {
-      try {
-        const squadsData = await get('/squad/all');
-        setSquads(squadsData);
-      } catch (error) {
-        showErrorAlert('Error fetching squads:', error.message);
-      }
-    };
-
-    fetchSquads();
-  }, []);
-
-  useEffect(() => {
     const fetchPlayers = async () => {
       if (selectedSquadId) {
         try {
@@ -39,6 +26,16 @@ const Game = () => {
         }
       }
     };
+    const fetchSquads = async () => {
+      try {
+        const squadsData = await get('/squad/all');
+        setSquads(squadsData);
+      } catch (error) {
+        showErrorAlert('Error fetching squads:', error.message);
+      }
+    };
+
+    fetchSquads();
 
     fetchPlayers();
   }, [selectedSquadId]);
@@ -62,7 +59,8 @@ const Game = () => {
   const handleMoneyUpdate = async () => {
     try {
       const squad = await get(`/squad/${selectedSquadId}`);
-      if (squad.money < price) {
+      console.log(squad.money, price, 'a')
+      if (squad.money > price) {
         showErrorAlert('Error', 'No tienes suficiente dinero en el equipo para jugar este partido');
       } else {
         const newBalance = squad.money - price;
@@ -74,12 +72,24 @@ const Game = () => {
     }
   };
 
+  const handleDivideTeams = async () => {
+    try {
+      const selectedPlayerObjects = players.filter(player => selectedPlayers.includes(player.id));
+      const dividedTeams = await divideTeams(selectedPlayerObjects);
+      setTeams(dividedTeams); // setTeams is asynchronous, so you can't immediately log teams here
+      console.log('Equipo 1:', dividedTeams.equipo1);
+      console.log('Equipo 2:', dividedTeams.equipo2);
+    } catch (error) {
+      showErrorAlert('Error dividing teams:', error.message);
+    }
+  };
+  
   const handleCreateGame = async () => {
     try {
       setLoading(true);
   
       // Divide los equipos antes de enviar los datos
-      await handleDivideTeams();
+      await handleDivideTeams(); // await for handleDivideTeams to complete and set the teams
   
       const newGameData = {
         datetime: newGameDatetime,
@@ -107,18 +117,7 @@ const Game = () => {
       setLoading(false);
     }
   };
-
-  const handleDivideTeams = async () => {
-    try {
-      const selectedPlayerObjects = players.filter(player => selectedPlayers.includes(player.id));
-      console.log('Jugadores seleccionados:', selectedPlayerObjects);
-      await setTeams(await divideTeams(selectedPlayerObjects));
-      console.log('Equipo 1:', teams.equipo1);
-      console.log('Equipo 2:', teams.equipo2);
-    } catch (error) {
-      showErrorAlert('Error dividing teams:', error.message);
-    }
-  };
+  
   
 
   const handlePlayerSelection = (playerId) => {
@@ -202,7 +201,7 @@ const Game = () => {
       </button>
       <button
         onClick={handleDivideTeams}
-        className="bg-green-500 text-white font-semibold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-500 mt-2"
+        className="bg-green-500 text-white font-semibold ml-6 px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-500 mt-2"
       >
         Dividir equipos
       </button>
