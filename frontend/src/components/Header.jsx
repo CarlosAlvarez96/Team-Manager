@@ -113,7 +113,7 @@ const Header = () => {
                   className="p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700"
                   onMouseLeave={resetHoverClass}
                 >
-                  Register
+                  Regístrate
                 </button>
               </div>
             )}
@@ -123,7 +123,7 @@ const Header = () => {
                 className="p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700"
                 onMouseLeave={resetHoverClass}
               >
-                Logout
+                Cerrar sesión
               </button>
             )}
           </ul>

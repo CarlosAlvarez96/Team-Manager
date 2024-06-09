@@ -53,16 +53,16 @@ const Login = () => {
 
       Swal.fire({
         icon: 'success',
-        title: 'Login successful',
-        text: `Welcome, ${userData.email || 'User'}!`,
+        title: 'Login completado',
+        text: `Bienvenido, ${userData.email || 'User'}!`,
       });
 
       navigate('/');
     } catch (error) {
-      console.error('Login failed', error);
+      console.error('Login falló', error);
       Swal.fire({
         icon: 'error',
-        title: 'Login Failed',
+        title: 'Login falló',
         text: 'Invalid credentials',
       });
     }
@@ -71,7 +71,7 @@ const Login = () => {
   return (
     <div className="mt-20">
       <form className="max-w-sm mx-auto" onSubmit={handleSubmit}>
-        <h2 className="block mb-4 text-2xl font-medium">Sign in</h2>
+        <h2 className="block mb-4 text-2xl font-medium">Login</h2>
         <hr className="mb-10" />
         <div className="mb-5">
           <label htmlFor="email" className="block mb-2 text-sm font-medium">
@@ -90,7 +90,7 @@ const Login = () => {
 
         <div className="mb-5">
           <label htmlFor="password" className="block mb-2 text-sm font-medium">
-            Password
+            Contraseña
           </label>
           <input
             type="password"
@@ -106,7 +106,7 @@ const Login = () => {
           type="submit"
           className="bg-gray-300 hover:bg-gray-500 hover:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center"
         >
-          Submit
+          Enviar
         </button>
       </form>
     </div>

@@ -69,16 +69,16 @@ const Register = () => {
 
       Swal.fire({
         icon: "success",
-        title: "Registration Successful!",
-        text: `Welcome, ${formData.username}!`,
+        title: "Registro completado!",
+        text: `Nombre registrado, ${formData.username}!`,
       });
       navigate("/login");
     } catch (error) {
-      console.error("Registration failed:", error);
+      console.error("Registro falló:", error);
       Swal.fire({
         icon: "error",
-        title: "Registration Failed",
-        text: "An error occurred during registration.",
+        title: "Registro falló",
+        text: "Ocurrió un error durante el registro.",
       });
     }
   };
@@ -98,7 +98,7 @@ const Register = () => {
             htmlFor="username"
             className={`block mb-2 text-sm font-medium `}
           >
-            Username
+            Nombre de usuario
           </label>
           <input
             type="text"
@@ -115,7 +115,7 @@ const Register = () => {
             htmlFor="email"
             className={`block mb-2 text-sm font-medium `}
           >
-            Your email
+            Tu email
           </label>
           <input
             type="email"
@@ -123,7 +123,7 @@ const Register = () => {
             value={formData.email}
             onChange={handleChange}
             className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 `}
-            placeholder="example@gmail.com"
+            placeholder="ejemplo@gmail.com"
             required
           />
         </div>
@@ -132,7 +132,7 @@ const Register = () => {
             htmlFor="password"
             className={`block mb-2 text-sm font-medium `}
           >
-            Password
+            Contraseña
           </label>
           <input
             type="password"

@@ -59,13 +59,17 @@ const Game = () => {
   const handleMoneyUpdate = async () => {
     try {
       const squad = await get(`/squad/${selectedSquadId}`);
-      if (squad.money > price) {
+      const priceNumber = parseFloat(price); 
+  
+      console.log("dinero del equipo", squad.money, "precio", priceNumber);
+  
+      if (squad.money < priceNumber) {
         showErrorAlert(
           "Error",
           "No tienes suficiente dinero en el equipo para jugar este partido"
         );
       } else {
-        const newBalance = squad.money - price;
+        const newBalance = squad.money - priceNumber;
         await post(`/squad/${selectedSquadId}/updateMoney`, {
           money: newBalance,
         });
@@ -81,6 +85,7 @@ const Game = () => {
       );
     }
   };
+  
 
   const handleDivideTeams = async () => {
     try {

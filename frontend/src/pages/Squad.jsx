@@ -90,20 +90,20 @@ const Squad = () => {
             ))}
           </div>
           <div className="mt-8">
-            <h2 className="text-2xl font-bold mb-4">Create a new squad</h2>
+            <h2 className="text-2xl font-bold mb-4">Crea una nueva peña</h2>
             <div className="flex">
               <input
                 type="text"
                 value={newSquadName}
                 onChange={(e) => setNewSquadName(e.target.value)}
                 className="border border-gray-300 rounded-l-lg px-4 py-2 w-full sm:w-2/3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Enter squad name"
+                placeholder="Introduce un nombre"
               />
               <button
                 onClick={handleCreateSquad}
                 className="bg-blue-500 text-white font-semibold px-4 py-2 rounded-r-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
-                Create Squad
+                Crear
               </button>
             </div>
           </div>
