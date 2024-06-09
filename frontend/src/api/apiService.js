@@ -66,7 +66,7 @@ const put = async (endpoint, dto) => {
 };
 
 
-const deleteMethod = async (endpoint) => {
+const deleteMethod  = async (endpoint) => {
   const token = sessionStorage.getItem("token");
   await fetch(`${apiUrl}${endpoint}`, {
     method: "DELETE",

@@ -29,6 +29,15 @@ class Game
     #[ORM\OneToMany(mappedBy: 'game', targetEntity: Participant::class)]
     private Collection $participants;
 
+    #[ORM\Column(length: 255)]
+    private ?string $team1 = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $team2 = null;
+
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 2, nullable: true)]
+    private ?string $price = null;
+
     public function __construct()
     {
         $this->participants = new ArrayCollection();
@@ -101,6 +110,42 @@ class Game
                 $participant->setGame(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getTeam1(): ?string
+    {
+        return $this->team1;
+    }
+
+    public function setTeam1(string $team1): static
+    {
+        $this->team1 = $team1;
+
+        return $this;
+    }
+
+    public function getTeam2(): ?string
+    {
+        return $this->team2;
+    }
+
+    public function setTeam2(string $team2): static
+    {
+        $this->team2 = $team2;
+
+        return $this;
+    }
+
+    public function getPrice(): ?string
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?string $price): static
+    {
+        $this->price = $price;
 
         return $this;
     }

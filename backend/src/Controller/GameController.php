@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use Doctrine\Common\Collections\Criteria;
 use App\Entity\Game;
+use App\Entity\User;
 use App\Repository\SquadRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -55,6 +56,12 @@ class GameController extends AbstractController
         if (!isset($data['squad_id'])) {
             return new JsonResponse(['error' => 'Squad ID is required'], Response::HTTP_BAD_REQUEST);
         }
+        if (!isset($data['team1'])) {
+            return new JsonResponse(['error' => 'Squad ID is required'], Response::HTTP_BAD_REQUEST);
+        }
+        if (!isset($data['team2'])) {
+            return new JsonResponse(['error' => 'Squad ID is required'], Response::HTTP_BAD_REQUEST);
+        }
     
         // Obtiene el repositorio de la entidad Squad
         $squadRepository = $entityManager->getRepository(Squad::class);
@@ -73,6 +80,9 @@ class GameController extends AbstractController
         $game->setDatetime(new \DateTime($data['datetime']));
         // Setea el escuadrón asociado al juego
         $game->setSquad($squad);
+        $game->setTeam1($data['team1']);
+        $game->setTeam2($data['team2']);
+        $game->setPrice($data['price']);
     
         // Verifica si se ha proporcionado la ubicación del juego
         if (isset($data['location'])) {
@@ -87,54 +97,100 @@ class GameController extends AbstractController
         return new JsonResponse(['message' => 'Game created successfully'], Response::HTTP_CREATED);
     }
     
-    #[Route('/{id}', name: 'game_get', methods: ['GET'])]
-    public function getGameById(int $id, EntityManagerInterface $entityManager): JsonResponse
-    {
-        // Obtiene el repositorio de la entidad Game
-        $gameRepository = $entityManager->getRepository(Game::class);
+    // #[Route('/{id}', name: 'game_get', methods: ['GET'])]
+    // public function getGameById(int $id, EntityManagerInterface $entityManager): JsonResponse
+    // {
+    //     // Obtiene el repositorio de la entidad Game
+    //     $gameRepository = $entityManager->getRepository(Game::class);
 
-        // Busca el juego por su ID
-        $game = $gameRepository->find($id);
+    //     // Busca el juego por su ID
+    //     $game = $gameRepository->find($id);
 
-        // Verifica si el juego existe
-        if (!$game) {
-            return new JsonResponse(['error' => 'Game not found'], Response::HTTP_NOT_FOUND);
-        }
+    //     // Verifica si el juego existe
+    //     if (!$game) {
+    //         return new JsonResponse(['error' => 'Game not found'], Response::HTTP_NOT_FOUND);
+    //     }
 
-        // Formatea los datos del juego para la respuesta
-        $formattedGame = [
-            'id' => $game->getId(),
-            'datetime' => $game->getDatetime() ? $game->getDatetime()->format('Y-m-d H:i:s') : null,
-            'location' => $game->getLocation(),
-            // Puedes incluir otros campos si lo deseas
-        ];
+    //     // Formatea los datos del juego para la respuesta
+    //     $formattedGame = [
+    //         'id' => $game->getId(),
+    //         'datetime' => $game->getDatetime() ? $game->getDatetime()->format('Y-m-d H:i:s') : null,
+    //         'location' => $game->getLocation(),
+    //         // Puedes incluir otros campos si lo deseas
+    //     ];
 
-        // Devuelve una respuesta JSON con el juego encontrado
-        return new JsonResponse($formattedGame);
-    }
-    #[Route('/{squadId}', name: 'games_by_squad', methods: ['POST'])]
+    //     // Devuelve una respuesta JSON con el juego encontrado
+    //     return new JsonResponse($formattedGame);
+    // }
+    // #[Route('/{squadId}', name: 'games_by_squad', methods: ['GET'])]
+    // public function getGamesBySquadId(int $squadId, EntityManagerInterface $entityManager): JsonResponse
+    // {
+    //     // Obtiene el repositorio de la entidad Game
+    //     $gameRepository = $entityManager->getRepository(Game::class);
+
+    //     // Obtiene todos los juegos
+    //     $games = $gameRepository->findAllBySquadId($squadId);
+
+    //     // Formatea los datos de los juegos para la respuesta
+    //     $formattedGames = [];
+    //     foreach ($games as $game) {
+    //         $formattedGames[] = [
+    //             'id' => $game->getId(),
+    //             'datetime' => $game->getDatetime() ? $game->getDatetime()->format('Y-m-d H:i:s') : null,
+    //             'location' => $game->getLocation(),
+    //             'price' => $game->getPrice(),
+    //             'team1' => $game->getTeam1(),
+    //             'team2' => $game->getTeam2(),
+    //         ];
+    //     }
+
+    //     // Devuelve una respuesta JSON con todos los juegos
+    //     return new JsonResponse($formattedGames);
+    // }
+    #[Route('/{squadId}', name: 'games_by_squad', methods: ['GET'])]
     public function getGamesBySquadId(int $squadId, EntityManagerInterface $entityManager): JsonResponse
     {
         // Obtiene el repositorio de la entidad Game
         $gameRepository = $entityManager->getRepository(Game::class);
-
+    
         // Obtiene todos los juegos
         $games = $gameRepository->findAllBySquadId($squadId);
-
+    
         // Formatea los datos de los juegos para la respuesta
         $formattedGames = [];
         foreach ($games as $game) {
+            // Convertir los strings de IDs en arrays de IDs
+            $team1Ids = explode(',', $game->getTeam1());
+            $team2Ids = explode(',', $game->getTeam2());
+    
+            // Obtener los nombres de usuario asociados a los IDs
+            $team1Usernames = [];
+            foreach ($team1Ids as $userId) {
+                $user = $entityManager->getRepository(User::class)->find($userId);
+                if ($user) {
+                    $team1Usernames[] = $user->getUsername();
+                }
+            }
+    
+            $team2Usernames = [];
+            foreach ($team2Ids as $userId) {
+                $user = $entityManager->getRepository(User::class)->find($userId);
+                if ($user) {
+                    $team2Usernames[] = $user->getUsername();
+                }
+            }
+    
             $formattedGames[] = [
                 'id' => $game->getId(),
                 'datetime' => $game->getDatetime() ? $game->getDatetime()->format('Y-m-d H:i:s') : null,
                 'location' => $game->getLocation(),
-                // Puedes incluir otros campos si lo deseas
+                'price' => $game->getPrice(),
+                'team1' => $team1Usernames, // Aquí están los nombres de usuario en lugar de IDs
+                'team2' => $team2Usernames, // Aquí están los nombres de usuario en lugar de IDs
             ];
         }
-
+    
         // Devuelve una respuesta JSON con todos los juegos
         return new JsonResponse($formattedGames);
     }
-
-
 }

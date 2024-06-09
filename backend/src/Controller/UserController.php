@@ -88,6 +88,40 @@ class UserController extends AbstractController
         // Devuelve una respuesta JSON con todos los usuarios
         return new JsonResponse($formattedUsers);
     }
+
+    #[Route('/multiple', name: 'user_get_multiple', methods: ['GET'])]
+    public function getUsersByIds(Request $request, EntityManagerInterface $entityManager): JsonResponse
+    {
+        // Obtiene los IDs de los jugadores desde la solicitud
+        $playerIds = $request->query->get('ids');
+
+        // Convierte los IDs a un array
+        $playerIdsArray = explode(',', $playerIds);
+
+        // Obtiene el repositorio de la entidad User
+        $userRepository = $entityManager->getRepository(User::class);
+
+        // Busca los usuarios por sus IDs
+        $users = $userRepository->findBy(['id' => $playerIdsArray]);
+
+        // Verifica si los usuarios existen
+        if (count($users) !== count($playerIdsArray)) {
+            return new JsonResponse(['error' => 'One or more users not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        // Formatea los datos de los usuarios para la respuesta
+        $formattedUsers = [];
+        foreach ($users as $user) {
+            $formattedUsers[] = [
+                'id' => $user->getId(),
+                'email' => $user->getEmail(),
+                'username' => $user->getUsername()
+            ];
+        }
+
+        // Devuelve una respuesta JSON con los usuarios encontrados
+        return new JsonResponse($formattedUsers);
+    }
     #[Route('/{id}', name: 'user_get', methods: ['GET'])]
     public function getUserById(int $id, EntityManagerInterface $entityManager): JsonResponse
 
@@ -107,7 +141,8 @@ class UserController extends AbstractController
         $formattedUser = [
             'id' => $user->getId(),
             'email' => $user->getEmail(),
-            'roles' => $user->getRoles() // Puedes incluir otros campos si lo deseas
+            'roles' => $user->getRoles(),
+            'username' => $user->getUsername()
         ];
 
         // Devuelve una respuesta JSON con el usuario encontrado

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { useParams } from 'react-router-dom';
 import PlayerCard from '../components/PlayerCard.jsx';
-import { get, post } from '../api/apiService';
+import { get, post, deleteMethod } from '../api/apiService';
 
 const SquadDetail = () => {
   const { id } = useParams();
@@ -27,8 +27,8 @@ const SquadDetail = () => {
     playerName: '',
   });
 
-  const currentUserId = parseInt(sessionStorage.getItem('userId')); // Reemplaza esto con la forma en que obtienes el ID del usuario actual
-  console.log('Current User ID:', currentUserId); // Para verificar que el ID del usuario actual se obtiene correctamente
+  const currentUserId = parseInt(sessionStorage.getItem('userId'));  
+  console.log('Current User ID:', currentUserId);  
   const fetchSquadById = async () => {
     try {
       const data = await get(`/squad/${id}`);
@@ -54,7 +54,7 @@ const SquadDetail = () => {
   const handleMoneyUpdate = async () => {
     try {
       await post(`/squad/${squad.id}/updateMoney`, { money: newMoney });
-      await fetchSquadById(); // Volver a cargar los detalles del equipo después de actualizar el dinero
+      await fetchSquadById();  
       Swal.fire({
         icon: 'success',
         title: 'Success',
@@ -73,7 +73,6 @@ const SquadDetail = () => {
     const fetchSquadById = async () => {
       try {
         const data = await get(`/squad/${id}`);
-        console.log('Squad Data:', data); // Para verificar la estructura de la respuesta
         setSquad(data);
         await fetchUsersBySquadId(id);
       } catch (error) {
@@ -82,8 +81,9 @@ const SquadDetail = () => {
     }
     const fetchGames = async (squadId) => {
       try {
-        const gamesData = await post('/game/' + squadId);
+        const gamesData = await get('/game/' + squadId);
         setGames(gamesData);
+        console.log('Games:', gamesData);
       } catch (error) {
         setError(error.message);
         showErrorAlert('Error fetching games:', error.message);
@@ -133,15 +133,28 @@ const SquadDetail = () => {
     }
   };
 
+  // Elimina las llamadas a showSuccessAlert y showErrorAlert
   const handleRemoveSelectedPlayers = async (userId) => {
     try {
-      await delete(`/${id}/removeUser/${userId}`);
-      showSuccessAlert('Success', 'Player deleted successfully');
+      console.log('Removing user:', `/squad/${id}/removeUser/${userId}`);
+      await deleteMethod(`/squad/${id}/removeUser/${userId}`);
+      // Utiliza Swal.fire para mostrar una alerta de éxito
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: 'Player deleted successfully',
+      });
       await fetchUsersBySquadId(id);
     } catch (error) {
-      showErrorAlert('Error', 'Failed to delete player');
+      // Utiliza Swal.fire para mostrar una alerta de error
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Failed to delete player',
+      });
     }
   };
+
 
   if (error) return <p>Error cargando detalles del equipo: {error.message}</p>;
 
@@ -231,6 +244,9 @@ const SquadDetail = () => {
               <li key={game.id}>
                 <strong>Lugar:</strong> {game.location}<br />
                 <strong>Date:</strong> {game.datetime}<br />
+                <strong>Price:</strong> {game.price}<br />
+                <strong>Team1:</strong> {game.team1.join(', ')}<br />
+                <strong>Team2:</strong> {game.team2.join(', ')}<br />
               </li>
             ))}
           </ul>

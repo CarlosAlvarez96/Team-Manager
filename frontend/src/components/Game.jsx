@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { get, post } from '../api/apiService.js';
+import divideTeams from '../assets/utils';
 
 const Game = () => {
-  const [games, setGames] = useState([]);
+  const [teams, setTeams] = useState([]);
   const [squads, setSquads] = useState([]);
   const [players, setPlayers] = useState([]);
   const [selectedSquadId, setSelectedSquadId] = useState(null);
@@ -20,7 +21,6 @@ const Game = () => {
         const squadsData = await get('/squad/all');
         setSquads(squadsData);
       } catch (error) {
-        console.error('Error fetching squads:', error);
         showErrorAlert('Error fetching squads:', error.message);
       }
     };
@@ -35,7 +35,6 @@ const Game = () => {
           const playersData = await get(`/user/squad/${selectedSquadId}`);
           setPlayers(playersData);
         } catch (error) {
-          console.error('Error fetching players:', error);
           showErrorAlert('Error fetching players:', error.message);
         }
       }
@@ -68,11 +67,7 @@ const Game = () => {
       } else {
         const newBalance = squad.money - price;
         await post(`/squad/${selectedSquadId}/updateMoney`, { money: newBalance });
-        Swal.fire({
-          icon: 'success',
-          title: 'Éxito',
-          text: 'El dinero del equipo se ha actualizado correctamente',
-        });
+        showSuccessAlert('Éxito', 'El dinero del equipo se ha actualizado correctamente');
       }
     } catch (error) {
       showErrorAlert('Error', 'Se produjo un error al actualizar el dinero del equipo');
@@ -82,16 +77,22 @@ const Game = () => {
   const handleCreateGame = async () => {
     try {
       setLoading(true);
-
+  
+      // Divide los equipos antes de enviar los datos
+      await handleDivideTeams();
+  
       const newGameData = {
         datetime: newGameDatetime,
         location: newGameLocation,
         squad_id: selectedSquadId,
-        players: selectedPlayers,
+        price: price,        
+        team1: teams.equipo1.join(','),
+        team2: teams.equipo2.join(','),
       };
-
+      
+      console.log('Datos del nuevo partido:', newGameData);
       await post('/game/create', newGameData);
-
+  
       setLoading(false);
       setError(null);
       setNewGameLocation('');
@@ -101,10 +102,31 @@ const Game = () => {
       handleMoneyUpdate();
       showSuccessAlert('¡Partido creado con éxito!', '');
     } catch (error) {
+      showErrorAlert('Error creating game:', error.message);
       setError(error.message);
       setLoading(false);
-      showErrorAlert('Error creating game:', error.message);
     }
+  };
+
+  const handleDivideTeams = async () => {
+    try {
+      const selectedPlayerObjects = players.filter(player => selectedPlayers.includes(player.id));
+      console.log('Jugadores seleccionados:', selectedPlayerObjects);
+      await setTeams(await divideTeams(selectedPlayerObjects));
+      console.log('Equipo 1:', teams.equipo1);
+      console.log('Equipo 2:', teams.equipo2);
+    } catch (error) {
+      showErrorAlert('Error dividing teams:', error.message);
+    }
+  };
+  
+
+  const handlePlayerSelection = (playerId) => {
+    setSelectedPlayers((prevSelectedPlayers) =>
+      prevSelectedPlayers.includes(playerId)
+        ? prevSelectedPlayers.filter((id) => id !== playerId)
+        : [...prevSelectedPlayers, playerId]
+    );
   };
 
   return (
@@ -146,20 +168,26 @@ const Game = () => {
       </div>
       <div className="mb-4">
         <label className="block mb-1">Jugadores:</label>
-        <select
-          multiple
-          value={selectedPlayers}
-          onChange={(e) => setSelectedPlayers(Array.from(e.target.selectedOptions, option => option.value))}
-          className="border border-gray-300 rounded-md px-4 py-2 w-full h-32 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {players.map((player) => (
-            <option key={player.id} value={player.id}>{player.username}</option>
+            <div key={player.id} className="flex items-center">
+              <input
+                type="checkbox"
+                id={`player-${player.id}`}
+                value={player.id}
+                checked={selectedPlayers.includes(player.id)}
+                onChange={() => handlePlayerSelection(player.id)}
+                className="mr-2"
+              />
+              <label htmlFor={`player-${player.id}`} className="text-lg">{player.username}</label>
+            </div>
           ))}
-        </select>
+        </div>
       </div>
       <div className="mb-4">
         <label className="block mb-1">Precio pista:</label>
-        <input type="number"
+        <input
+          type="number"
           value={price}
           onChange={(e) => setPrice(e.target.value)}
           className="border border-gray-300 rounded-md px-4 py-2 w-full focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -171,6 +199,12 @@ const Game = () => {
         disabled={loading}
       >
         {loading ? 'Creating Game...' : 'Create Game'}
+      </button>
+      <button
+        onClick={handleDivideTeams}
+        className="bg-green-500 text-white font-semibold px-4 py-2 rounded focus:outline-none focus:ring-2 focus:ring-green-500 mt-2"
+      >
+        Dividir equipos
       </button>
       {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>

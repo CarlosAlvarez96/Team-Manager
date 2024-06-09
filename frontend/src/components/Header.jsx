@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+import '../fade.css';
 
 const Header = () => {
   const { logout, token } = useAuth();
@@ -54,10 +55,10 @@ const Header = () => {
   };
 
   return (
-    <div className={`bg-green-500`}>
-      <div className="flex flex-col md:flex-row justify-between items-center p-4 ">
+    <div className="header-gradient">
+      <div className="flex flex-col md:flex-row justify-between items-center p-4">
         <div className="flex items-center">
-          <h2 className={`text-4xl font-bold p-2 m-2 `}>
+          <h2 className="text-4xl font-bold p-2 m-2">
             Gestor de equipos
           </h2>
         </div>
@@ -82,26 +83,22 @@ const Header = () => {
         </button>
         <nav className={`md:flex md:items-center md:w-auto ${menuOpen ? 'block' : 'hidden'}`}>
           <ul className="flex flex-col md:flex-row justify-between space-y-2 md:space-y-0 md:space-x-4 mt-4 md:mt-0">
-            <button
-              className={`bg- font-bold px-4 py-2 rounded`}
-            >
-            </button>
+            <button className={`bg- font-bold px-4 py-2 rounded`}></button>
             <button
               onClick={handleSquad}
-              className={`p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700`}
+              className="p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700"
             >
               Equipos
             </button>
-
             <button
               onClick={handleMyStats}
-              className={`p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700`}
+              className="p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700"
             >
               Estadísitcas
             </button>
             <button
               onClick={handleGames}
-              className={`p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700`}
+              className="p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700"
             >
               Partidos
             </button>
@@ -109,15 +106,15 @@ const Header = () => {
               <div>
                 <button
                   onClick={handleLogin}
-                  className={`p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700`}
-                    onMouseLeave={resetHoverClass}
+                  className="p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700"
+                  onMouseLeave={resetHoverClass}
                 >
                   Login
                 </button>
                 <button
                   onClick={handleRegister}
-                  className={`p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700`}
-                    onMouseLeave={resetHoverClass}
+                  className="p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700"
+                  onMouseLeave={resetHoverClass}
                 >
                   Register
                 </button>
@@ -126,7 +123,7 @@ const Header = () => {
             {token && (
               <button
                 onClick={handleLogout}
-                className={`p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700`}
+                className="p-2 rounded-lg hover:bg-green-700 text-white text-lg border border-transparent focus:outline-none focus:border-green-700 focus:ring-2 focus:ring-green-700"
                 onMouseLeave={resetHoverClass}
               >
                 Logout
